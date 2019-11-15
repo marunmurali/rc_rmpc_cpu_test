@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="rc_rmpc_cpu" type="rc_rmpc_cpu" name="rc_rmpc_cpu" respawn="true" output="screen">
+  </node>
+</launch>
+
