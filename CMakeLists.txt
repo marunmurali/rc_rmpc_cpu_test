@@ -8,12 +8,13 @@ std_msgs
 sensor_msgs
 message_generation
 custom_pkg
-) 
+)
 
 add_message_files(
   DIRECTORY msg
   FILES
   control_signal.msg
+  log_sig.msg
 )
 
 catkin_package(
@@ -29,7 +30,7 @@ set(MIN_CUDA_SRC
 
 include_directories(
 include
-/home/suzlab/eigen
+/home/arun/eigen
   ${PROJECT_SOURCE_DIR}/include
   ${catkin_INCLUDE_DIRS}
   ${CUDA_INCLUDE_DIRS}

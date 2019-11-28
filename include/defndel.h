@@ -7,12 +7,12 @@
 double kf =19.7, kr = 12.2, lf = .14784, lr = .10716,l = .255, m = 2.0302, acc, x_tmp, utmp = 0;//
 //kf =0.0197, kr = 0.0122
 double u_vir = 0;// virtual of tire_angle
-double dt = 0.05, T = 30 / dt;//dt:§ŒäüŠú T:not used
-int N = 30, Ns = 500, vkmh = 3.6;// N:—\‘ªƒzƒ‰ƒCƒYƒ“’·‚³ Ns:ƒTƒ“ƒvƒ‹Œn—ñ”
-double v;// = vkmh / 3.6;//‘¬“x m/s
+double dt = 0.05, T = 30 / dt;//dt:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ T:not used
+int N = 30, Ns = 500, vkmh = 3.6;// N:ï¿½\ï¿½ï¿½ï¿½zï¿½ï¿½ï¿½Cï¿½Yï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ns:ï¿½Tï¿½ï¿½ï¿½vï¿½ï¿½ï¿½nï¿½ï¿½ï¿½ï¿½
+double v;// = vkmh / 3.6;//ï¿½ï¿½ï¿½x m/s
 //double v1;
 
-					  //ˆÚ“®—\‘ªƒ‚ƒfƒ‹‚É•K—v‚ÈŒvZ
+					  //ï¿½Ú“ï¿½ï¿½\ï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½É•Kï¿½vï¿½ÈŒvï¿½Z
 //double p1 = 1 - (m*(lf*kf - lr*kr)*v*v) / (2 * l*l*kf*kr);
 //double p2 = 1 - (m*lf*v*v) / (2 * l*lr*kr);
 //double b1 = (p2*lr*v) / (l*p1);
@@ -25,7 +25,7 @@ double logcost;
 int cos_ckr2 = 15;//less than N
 double kij;
 double temparray[20][50];
-double tem=.4;
+double tem=.5;
 double disteff=.1;
 
 vector< vector<double> > u(Ns, vector<double>(N));
@@ -37,7 +37,7 @@ vector< vector<double> > xpos(Ns, vector<double>(N));
 vector< vector<double> > ypos(Ns, vector<double>(N));
 vector< vector<double> > theta(Ns, vector<double>(N));
 //for cost function
-vector<double> usum(Ns);//“ü—Í·•ª delta_u
+vector<double> usum(Ns);//ï¿½ï¿½ï¿½Íï¿½ï¿½ï¿½ delta_u3
 vector<double> cost1(Ns);
 vector<double> cost2(Ns);
 vector<double> avoidobs1(Ns);
@@ -47,17 +47,17 @@ double cost3 = 0;
 vector<double> cost4(Ns);
 
 vector<double> cost(Ns);//J(t)
-vector<double> Pot1(Ns);//áŠQ•¨ƒ|ƒeƒ“ƒVƒƒƒ‹
+vector<double> Pot1(Ns);//ï¿½ï¿½ï¿½Qï¿½ï¿½ï¿½|ï¿½eï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½
 vector<double> Pot2(Ns);
 vector<double> Pot3(Ns);
-vector<double> Potwall(Ns);//•Ç‚Ìƒ|ƒeƒ“ƒVƒƒƒ‹
+vector<double> Potwall(Ns);//ï¿½Ç‚Ìƒ|ï¿½eï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½
 vector<double> uback(Ns);
-//ƒn[ƒh§–ñ‚Ì‘È‰~‚Ì’·’Z²
-double reca = 0.4;
-double recb = 0.3;
+//ï¿½nï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½Ì‘È‰~ï¿½Ì’ï¿½ï¿½Zï¿½ï¿½
+double reca = 0.7;
+double recb = 0.2;
 double recanew = 0.4;
-//•Ç‚Ìî•ñ
-double ywl = .3;
+//ï¿½Ç‚Ìï¿½ï¿½ï¿½
+double ywl = .4;
 double ywr = -ywl;
 //double ywr=-5.0;
 double wallmin = 2 * log(ywl);
@@ -67,15 +67,15 @@ const double pi = 3.141592654;
 double umin = -2 * pi / 180;
 double umax = 2 * pi / 180;
 
-//•]‰¿ŠÖ”‚ÌŠeƒpƒ‰ƒ[ƒ^‚Ìİ’è
+//ï¿½]ï¿½ï¿½ï¿½Öï¿½ï¿½ÌŠeï¿½pï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½^ï¿½Ìİ’ï¿½
 int sf = 1000, Q = 1, R = 500, P = 7000, c = 10, Rt = 0, Rw = 3;//P is Robs
 
 // try
 //int sf=1, Q=100, R=3000, P=3000, c=10, Rt=0, Rw=5;
 
-//áŠQ•¨‚ÌˆÊ’u
+//ï¿½ï¿½ï¿½Qï¿½ï¿½ï¿½ÌˆÊ’u
 double obs1[2] = { .8,0.05 };
-double obs2[2] = { 2.5,-0.05 };
+double obs2[2] = { 3,-0.05 };
 double obs3[2] = { 30,0.85 };
 
 double tem_calc1, tem_calc2;

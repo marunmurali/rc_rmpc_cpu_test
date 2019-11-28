@@ -26,7 +26,7 @@ double Jobs2CPU(double px, double py,double car_yaw,double car_input,double curr
 	//std::ofstream out("test.csv");
 
 fprintf(stdout,"Current values: (x,y,yaw,ta,vel) = (%.2f, %.2f, %.2f, %.2f, %.2f) ",px, py, car_yaw*RAD2DEG, car_input*RAD2DEG,v);
-std::cout<<std::endl; 
+std::cout<<std::endl;
 
 	clock_t tStart = clock();
 	random_device rnd;     // 非決定的な乱数生成器でシード生成機を生成
@@ -99,7 +99,7 @@ std::cout<<std::endl;
 				u[i][j] = utmp+ uspnew[i][j];
 	utmp=u[i][j];
 }
-		
+
 			if (u[i][j] > imax)
 			{
 				u[i][j] = imax;
@@ -116,7 +116,7 @@ double p1 = 1 - (m*(lf*kf - lr*kr)*v*v) / (2 * l*l*kf*kr);
 double p2 = 1 - (m*lf*v*v) / (2 * l*lr*kr);
 double b1 = (p2*lr*v) / (l*p1);
 double b2 = v / (l*p1);
-	
+
 	//extended xy theta matrix
 	for (int i = 0; i < Ns; ++i) {
 		for (int j = 1; j < N; ++j) {
@@ -131,6 +131,19 @@ double b2 = v / (l*p1);
 	}
 
 	//cost calculation
+	//multipliers
+	double dist1 = sqrt(pow((px - obs1[0] + disteff), 2.0) + pow(py - obs1[1], 2.0));
+	double dist2 = sqrt(pow((px - obs2[0] + disteff), 2.0) + pow(py - obs2[1], 2.0));
+	if (dist1 > tem) {
+		dist1 = tem;
+	}
+	if (dist2 > tem) {
+		dist2 = tem;
+	}
+	double eff1 = dist1 / tem;
+	double eff2 = dist2 / tem;
+	double sumeff = 2 + eff1 * eff2 - eff1 - eff2;
+//cost
 	for (int i = 0; i < Ns; ++i) {
 		cost1[i] = 0;
 		cost2[i] = 0;
@@ -170,20 +183,10 @@ double b2 = v / (l*p1);
 	}
 	cost3 = pow(ypos[i][N - 1], 2) + pow(theta[i][N - 1], 2);
 	//costobs[i] = avoidobs1[i] + avoidobs2[i];
-	
-	double dist1 = sqrt(pow((px - obs1[0] + disteff), 2.0) + pow(py - obs1[1], 2.0));
-	double dist2 = sqrt(pow((px - obs2[0] + disteff), 2.0) + pow(py - obs2[1], 2.0));
-	if (dist1 > tem) {
-		dist1 = tem;
-	}
-	if (dist2 > tem) {
-		dist2 = tem;
-	}
-	double eff1 = dist1 / tem;
-	double eff2 = dist2 / tem;
-	double sumeff = 2 + eff1 * eff2 - eff1 - eff2;
-	
-	
+
+
+
+
 	cost[i] = (eff1*eff2*(Q*cost1[i]+R*cost2[i]+ sf*cost3)+(1 - eff1)*P*avoidobs1[i]/Ns +(1 - eff2)*P*avoidobs2[i]/Ns)/sumeff+Rw*cost4[i];
 	//Jsum[i] = (eff1 * eff2 * sf * J2[i] + eff1 * eff2 * Q * J1[i] + (1 - eff1) * P * Pot1[i] / Ns + (1 - eff2) * P * Pot2[i] / Ns + eff1 * eff2 * R * usum[i]) / sumeff + Rw * Potwall[i];
 	if(isnan(cost[i]))
@@ -219,4 +222,3 @@ return u[minindex][2];
 	vector< vector<double> >().swap(theta);
 
 }
-	

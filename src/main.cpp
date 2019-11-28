@@ -14,6 +14,7 @@
 #include <string>
 #include <std_msgs/Float32MultiArray.h>
 #include <custom_pkg/control_signal.h>
+#include <custom_pkg/log_sig.h>
 //#include "FrenetCoordinate.h"
 #include "Car.h"
 #include "MathTools.h"
@@ -78,8 +79,10 @@ ros::NodeHandle n;
 ros::Subscriber sub1 = n.subscribe("/vrpn_client_node/RigidBody001/pose", 1000, chatterCallback_Optitrack);
 ros::Publisher time_pub = n.advertise<std_msgs::Float32>("/time", 1);
 ros::Subscriber size_sub = n.subscribe("/size", 100, size_Callback);
-ros::Publisher pub = n.advertise<custom_pkg::control_signal>("/control_signal", 50);
+ros::Publisher pub = n.advertise<custom_pkg::control_signal>("/control_signal001", 50);
+ros::Publisher publ = n.advertise<custom_pkg::log_sig>("/log_sig", 50);
 custom_pkg::control_signal dat;
+custom_pkg::log_sig logd;
 ros::Rate loop_rate(100);	// 100 Hz
 double speed_ref = 1.8;
 double Tf = 0.2;	// Derivative filter's time constant
@@ -119,7 +122,7 @@ angle_Opt_z = angle_Optitrack_z;
         lcurrent_speed = sqrt(vx*vx+vy*vy);
 start = clock();
 // Calculate the car input
-//::cout<<angle_Optitrack_z*RAD2DEG<<std::endl;  
+//::cout<<angle_Optitrack_z*RAD2DEG<<std::endl;
 
 lcar_input=Jobs2CPU(lpy, lpx, lcar_yaw, lcar_input,lcurrent_speed);//0.0174533*
 
@@ -131,13 +134,26 @@ dat.accel=00;
 }
 else
 {
-dat.accel=40;//number for speed pwm
+dat.accel=10;//number for speed pwm
 }
 dat.steer=lcar_input*RAD2DEG*15.84;//number for steering pwm
 dat.status=1;
 pub.publish(dat);
 end = clock();
+//timeused
 cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+//logsignal
+logd.header.stamp=ros::Time::now();
+logd.accel=dat.accel;//number for steering pwm
+logd.steer=dat.steer;
+logd.xpos=lpy;
+logd.ypos=1.5-lpx;
+logd.ta=lcar_input;
+logd.yaw=lcar_yaw;
+logd.vel=lcurrent_speed;
+logd.status=1;
+logd.comptime=cpu_time_used;
+publ.publish(logd);
 std::cout<<cpu_time_used<<std::endl;
 //msg_time.data=cpu_time_used;
 //time_pub.publish(msg_time);
