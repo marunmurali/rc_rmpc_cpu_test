@@ -100,6 +100,7 @@ Car car;
 // START LOOOOOOOOOOOOP!
 while(ros::ok())
 {
+start = clock();
 angle_Opt_x = angle_Optitrack_x;
 angle_Opt_y = angle_Optitrack_y;
 angle_Opt_z = angle_Optitrack_z;
@@ -117,7 +118,6 @@ angle_Opt_z = angle_Optitrack_z;
         lpx = car.getX();
         lpy = car.getY();
         lcurrent_speed = sqrt(vx*vx+vy*vy);
-start = clock();
 // Calculate the car input
 //::cout<<angle_Optitrack_z*RAD2DEG<<std::endl;  
 
