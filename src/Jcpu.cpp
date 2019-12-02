@@ -31,14 +31,14 @@ std::cout<<std::endl;
 	clock_t tStart = clock();
 	random_device rnd;     // 非決定的な乱数生成器でシード生成機を生成
 	mt19937 mt(rnd()); //  メルセンヌツイスターの32ビット版、引数は初期シード
-					   //std::uniform_int_distribution<> rand100(0, 99);     // [0, 99] 範囲の一様乱数 int real
-	normal_distribution<> norm(0.0, 1.0);       // 平均0, 分散値1の正規分布
+	std::uniform_int_distribution<> norm(-99, 99);     // [0, 99] 範囲の一様乱数 int real
+	//normal_distribution<> norm(0.0, 1.0);       // 平均0, 分散値1の正規分布
 												//uniform_real_distribution<> rand2(-2, 2);
 
 	for (int i = 0; i < cos_ckr2; ++i) {
 		for (int j = 0; j < Ns; ++j) {
-			//usp[i][j] = 1; //for test
-			usp[i][j] = norm(mt)*pi / 180;
+			usp[i][j] =  (float)norm(mt)/2000; //for test
+			//usp[i][j] = norm(mt)*pi / 180;
 		}
 	}
 
