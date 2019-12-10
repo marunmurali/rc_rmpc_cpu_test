@@ -19,8 +19,8 @@ double Jobs2CPU(double px, double py,double car_yaw,double car_input,double curr
 {
 	py=1.5-py;
 	//car_yaw=car_yaw;
-	if(current_speed<.5)
-	v=.5;
+	if(current_speed<.2)
+	v=.2;
 	else
 	v=current_speed;
 	//std::ofstream out("test.csv");

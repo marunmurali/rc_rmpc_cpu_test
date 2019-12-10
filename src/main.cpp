@@ -134,7 +134,7 @@ dat.accel=00;
 }
 else
 {
-dat.accel=10;//number for speed pwm
+dat.accel=5;//number for speed pwm
 }
 dat.steer=lcar_input*RAD2DEG*15.84;//number for steering pwm
 dat.status=1;

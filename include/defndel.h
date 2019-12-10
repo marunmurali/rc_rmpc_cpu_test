@@ -8,7 +8,7 @@ double kf =19.7, kr = 12.2, lf = .14784, lr = .10716,l = .255, m = 2.0302, acc, 
 //kf =0.0197, kr = 0.0122
 double u_vir = 0;// virtual of tire_angle
 double dt = 0.05, T = 30 / dt;//dt:�������� T:not used
-int N = 30, Ns = 500, vkmh = 3.6;// N:�\���z���C�Y������ Ns:�T���v���n����
+int N = 30, Ns = 1000, vkmh = 3.6;// N:�\���z���C�Y������ Ns:�T���v���n����
 double v;// = vkmh / 3.6;//���x m/s
 //double v1;
 
@@ -26,7 +26,7 @@ int cos_ckr2 = 15;//less than N
 double kij;
 double temparray[20][50];
 double tem=.5;
-double disteff=.1;
+double disteff=.7;
 
 vector< vector<double> > u(Ns, vector<double>(N));
 vector< vector<double> > uspnew(Ns, vector<double>(N));
@@ -74,8 +74,8 @@ int sf = 1000, Q = 1, R = 500, P = 7000, c = 10, Rt = 0, Rw = 3;//P is Robs
 //int sf=1, Q=100, R=3000, P=3000, c=10, Rt=0, Rw=5;
 
 //���Q���̈ʒu
-double obs1[2] = { .8,0.05 };
-double obs2[2] = { 3,-0.05 };
+double obs1[2] = { 1,0.05 };
+double obs2[2] = { 3.2,-0.05 };
 double obs3[2] = { 30,0.85 };
 
 double tem_calc1, tem_calc2;
